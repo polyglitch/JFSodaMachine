@@ -13,42 +13,19 @@ public class SodaSold implements State{
     }
 
     @Override
-    public boolean insertQuarter(Context context){
-        System.out.println("invalid choice");
-        System.out.println();
-        return true;
-    }
-
-    @Override
-    public boolean removeQuarter(Context context){
-        System.out.println("invalid choice");
-        System.out.println();
-        return true;
-    }
-
-    @Override
-    public boolean chooseSoda(Context context){
-        System.out.println("invalid choice");
-        System.out.println();
-        return true;
-    }
-
-    @Override
-    public boolean dispenseSoda(Context context){
-        System.out.println("Machine is in the SodaSold state");
-        System.out.println("Machine is moving to DispenseSoda  state");
-        System.out.println();
-        context.setState(OutOfSoda.instance());
-        return true;
-    }
-
-    @Override
     public void updateMenu(Context context) {
-        if (context.getSoda().sell()){
+
+        //fetch the currently chose soda
+        Soda currentSoda = context.getSoda();
+
+        //go to NoQuarter if there is stock to be sold
+        if (currentSoda.sell()){
+            System.out.print("\nSold and dispensed " + currentSoda.getSodaName() + "\n");
             context.setState(NoQuarter.instance());
         }
+        //Return to HasQuarter if there is no stock in the chosen soda
         else {
-            System.out.print("Out of " + context.getSoda().getSodaName() + "\nPlease choose something else");
+            System.out.print("\nOut of " + currentSoda.getSodaName() + "\nPlease choose something else");
             context.setState(HasQuarter.instance());
         }
 

@@ -11,6 +11,7 @@ public class SodaList {
     //constructor
     public SodaList() {
         sodaList = new ArrayList<Soda>();
+        totalSodas = 0;
 
     }
 
@@ -26,19 +27,36 @@ public class SodaList {
     }
 
     //add a new soda to the list or add stock to an existing soda
-    public void addSoda(String sodaName, Integer amount) {
+    public Boolean addSoda(String sodaName, Integer amount) {
         //create a boolean to check to see if the new soda name is already in the soda list
         Boolean inList = false;
         Soda currentSoda = findSoda(sodaName);
 
-        //if you found a match refill the soda by the given amount instead of creating a new soda
+        totalSodas = totalSodas + amount;
+
+        //if it isn't in the current list add it
+        //otherwise add the amount to the current stock in that soda
         if (currentSoda == null){
             sodaList.add(new Soda(sodaName, sodaList.size(), amount));
+            return true;
         }
         else {
-            inList = true;
             currentSoda.refillSoda(amount);
+            return false;
         }
+    }
+
+    //take in a soda number and return it as a string
+    public String getSodaName(Integer index) {
+        return sodaList.get(index).getSodaName();
+    }
+
+    public Integer size() {
+        return sodaList.size();
+    }
+
+    public Integer getTotalSodas() {
+        return totalSodas;
     }
 
     //iterate through the list to find out whether or not all the stock has been sold
@@ -51,6 +69,9 @@ public class SodaList {
     }
 
     //
+    public Boolean sellSoda(Integer index) {
+        return sodaList.get(index).sell();
+    }
     public Boolean sellSoda(String sodaName) {
         if (findSoda(sodaName).sell())
             return true;
@@ -58,6 +79,18 @@ public class SodaList {
             return false;
     }
 
+    public Soda getSoda(Integer index) {
+        return sodaList.get(index);
+    }
+
+    public Boolean isSoldOut() {
+        for (Soda soda: sodaList) {
+            if (soda.hasStock()) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 
 }

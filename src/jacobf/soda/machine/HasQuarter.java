@@ -1,6 +1,7 @@
 package jacobf.soda.machine;
 
 import java.io.IOException;
+import java.util.Scanner;
 
 public class HasQuarter implements State{
 
@@ -12,94 +13,49 @@ public class HasQuarter implements State{
         return instance;
     }
 
-
-    @Override
-    public boolean insertQuarter(Context context){
-        System.out.println("invalid choice");
-        System.out.println();
-        return false;
-    }
-
-    @Override
-    public boolean removeQuarter(Context context){
-        System.out.println("Machine is in the HasQuarter state");
-        System.out.println("Machine is moving to NoQuarter state");
-        System.out.println();
-        context.setState(NoQuarter.instance());
-
-        return true;
-    }
-
-    @Override
-    public boolean chooseSoda(Context context){
-        System.out.println("Machine is in the HasQuarter state");
-        System.out.println("Machine is moving to SodaSold state");
-        System.out.println();
-        context.setState(SodaSold.instance());
-        return true;
-    }
-
-    @Override
-    public boolean dispenseSoda(Context context){
-        System.out.println("invalid choice");
-        System.out.println();
-        return false;
-    }
-
     @Override
     public void updateMenu(Context context) {
         System.out.println();
         System.out.println("Machine is in HasQuarter state");
-        System.out.println();
         System.out.println("Enter a number to make a selection.");
-        System.out.println("0. Soda 0.");
-        System.out.println("1. Soda 1.");
-        System.out.println("2. Soda 2.");
-        System.out.println("3. Soda 3.");
-        System.out.println("4. Soda 4.");
-        System.out.println("5. Soda 5");
-        System.out.println("7. Return Quarter 7");
+        System.out.println();
+        System.out.println("-1. Return Quarter");
+        System.out.println();
+        //reduce calls
+        Integer kinds = context.getKindsOfSoda();
 
-        int choice = -1;
-        try {
-            choice = System.in.read();
-        }
-        catch (IOException e){
-            System.out.println("error");
+        //list all of the possible soda choices
+        for (int i = 0; i < kinds; i++)
+        {
+            System.out.print(i + ". " + context.sodaList.getSodaName(i) + "\n");
         }
 
-        switch (choice) {
-            case 1: System.out.println("Machine is moving to DispenseSoda state");
-                    System.out.println();
-                    context.setState(SodaSold.instance());
+        //read user input from command line
+        Scanner in = new Scanner(System.in);
+        String s = in.nextLine();
+        Integer choice = Integer.parseInt(s);
 
-            case 2: System.out.println("Machine is moving to DispenseSoda state");
-                    System.out.println();
-                    context.setState(SodaSold.instance());
 
-            case 3: System.out.println("Machine is moving to DispenseSoda state");
-                    System.out.println();
-                    context.setState(SodaSold.instance());
 
-            case 4: System.out.println("Machine is moving to DispenseSoda state");
-                    System.out.println();
-                    context.setState(SodaSold.instance());
-
-            case 5: System.out.println("Machine is moving to DispenseSoda state");
-                    System.out.println();
-                    context.setState(SodaSold.instance());
-
-            case 7: System.out.println("Machine is moving to NoQuarter state");
-                    System.out.println();
-                    context.setState(NoQuarter.instance());
-            default:
+        //return quarter if chosen
+        //dispense a soda
+        //stay in the same state if the soda is out of stock or an invalid choice is picked
+        if (choice == -1) {
+            System.out.print("Returning your quarter \n");
+            context.setState(NoQuarter.instance());
         }
+        else if (choice >= 0 && choice <= kinds ) {
+            Soda soda = context.sodaList.getSoda(choice);
+            System.out.print("\nYou chose " + soda.getSodaName() + "\n");
+            context.setSoda(soda);
+            context.setState(SodaSold.instance());
+        }
+        else {
+            System.out.print("\n Invalid choice");
+        }
+
 
 
     }
 
-
-    public String toString(){
-        return "has quarter state";
-    }
 }

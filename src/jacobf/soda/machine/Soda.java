@@ -23,6 +23,7 @@ public class Soda {
         return sodaID;
     }
 
+    //add stock to the current soda
     public void refillSoda (Integer amount){
         sodaAmount = sodaAmount + amount;
     }
@@ -30,19 +31,22 @@ public class Soda {
     //confirm that the soda has stock
     public Boolean hasStock() {
         if (sodaAmount > 0)
-            return false;
-        else
             return true;
+        else
+            return false;
     }
+
 
     //if you can sell one soda reduce the amount of sodas by 1 return true
     //otherwise return false
     public Boolean sell() {
-        if (sodaAmount > 0)
-            return false;
-        else
+        if (sodaAmount > 0) {
             sodaAmount = sodaAmount - 1;
             return true;
+        }
+
+        else
+            return false;
     }
 
 
