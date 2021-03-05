@@ -23,21 +23,21 @@ public class NoQuarter implements State{
         }
         else {
 
+            //ask for a selection
             System.out.println("Enter a number to make a selection.");
-            System.out.println("1. Insert Quarter.");
-
+            System.out.println("1. Insert Quarter.\n");
             Scanner in = new Scanner(System.in);
             String s = in.nextLine();
             Integer choice = Integer.parseInt(s);
 
-            switch (choice) {
-                case 1:
-                    System.out.println("Machine is in NoQuarter state");
-                    System.out.println("Machine is moving to hasQuarter state");
-                    System.out.println();
-                    context.setState(HasQuarter.instance());
-
-                default:
+            //parse the selection
+            //100 is a hidden code to go to admin
+            if (choice == 1) {
+                System.out.println();
+                context.setState(HasQuarter.instance());
+            }
+            else if (choice == 100) {
+                context.setState(Admin.instance());
             }
         }
 

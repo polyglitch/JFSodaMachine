@@ -41,9 +41,11 @@ public class Context {
     //add sodas to machine
     //return true if the soda was new to the machine
     //return false otherwise
-    public Boolean addSoda(String sodaName, Integer amount) {
-        return sodaList.addSoda(sodaName, amount);
+
+    public Boolean addSoda(String sodaName, Integer amount, Integer max) {
+        return sodaList.addSoda(sodaName, amount, max);
     }
+
 
     //return kinds of soda
     public Integer getKindsOfSoda() {

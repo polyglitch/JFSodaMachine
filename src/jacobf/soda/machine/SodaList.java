@@ -5,8 +5,8 @@ import java.util.ArrayList;
 //serves as a list to keep track of what sodas the vending machine is selling as well as how much they have in stock
 public class SodaList {
 
-    private ArrayList<Soda> sodaList;
-    private Integer totalSodas;
+    private ArrayList<Soda> sodaList; //keep track of all of the sodas
+    private Integer totalSodas; //a running total of every can of soda in the machine
 
     //constructor
     public SodaList() {
@@ -19,7 +19,7 @@ public class SodaList {
     //return null if it doesn't exist
     private Soda findSoda(String sodaName) {
         for (Soda soda : sodaList) {
-            if (soda.getSodaName() == sodaName) {
+            if (soda.getSodaName().equals(sodaName)) {
                 return soda;
             }
         }
@@ -27,7 +27,7 @@ public class SodaList {
     }
 
     //add a new soda to the list or add stock to an existing soda
-    public Boolean addSoda(String sodaName, Integer amount) {
+    public Boolean addSoda(String sodaName, Integer amount, Integer max) {
         //create a boolean to check to see if the new soda name is already in the soda list
         Boolean inList = false;
         Soda currentSoda = findSoda(sodaName);
@@ -37,13 +37,19 @@ public class SodaList {
         //if it isn't in the current list add it
         //otherwise add the amount to the current stock in that soda
         if (currentSoda == null){
-            sodaList.add(new Soda(sodaName, sodaList.size(), amount));
+            sodaList.add(new Soda(sodaName, sodaList.size(), amount, max));
             return true;
         }
         else {
-            currentSoda.refillSoda(amount);
+            //if you want to refill this way uncomment this
+            //currentSoda.refillSoda(amount);
             return false;
         }
+    }
+
+    public Integer addStock (Integer restockAmount) {
+        totalSodas = totalSodas + restockAmount;
+        return totalSodas;
     }
 
     //take in a soda number and return it as a string
@@ -51,10 +57,12 @@ public class SodaList {
         return sodaList.get(index).getSodaName();
     }
 
+    //return number of sodas in the list
     public Integer size() {
         return sodaList.size();
     }
 
+    //return the total cans of soda in the machine including all flavors
     public Integer getTotalSodas() {
         return totalSodas;
     }
@@ -68,21 +76,28 @@ public class SodaList {
             return true;
     }
 
-    //
+    //call sellSoda in an individual soda
+    //return true if it has stock to sell
+    //otherwise return false
     public Boolean sellSoda(Integer index) {
         return sodaList.get(index).sell();
     }
-    public Boolean sellSoda(String sodaName) {
-        if (findSoda(sodaName).sell())
-            return true;
-        else
-            return false;
+
+    //tell a soda to refill back to it's maximum capacity
+    //return the amount of soda that was added to the machine
+    public Integer refillSoda(Integer index) {
+        Integer refills = sodaList.get(index).refillSoda();
+        totalSodas = refills + totalSodas;
+        return refills;
     }
 
+    //get an individual soda from its position in the the list
     public Soda getSoda(Integer index) {
         return sodaList.get(index);
     }
 
+    //return true if every soda in the machine has been sold out
+    //otherwise return false
     public Boolean isSoldOut() {
         for (Soda soda: sodaList) {
             if (soda.hasStock()) {

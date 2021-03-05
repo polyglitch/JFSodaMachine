@@ -33,7 +33,9 @@ public class HasQuarter implements State{
         //read user input from command line
         Scanner in = new Scanner(System.in);
         String s = in.nextLine();
-        Integer choice = Integer.parseInt(s);
+        int choice = Integer.parseInt(s);
+
+        System.out.print("\nChoice was " + choice);
 
 
 
@@ -49,6 +51,10 @@ public class HasQuarter implements State{
             System.out.print("\nYou chose " + soda.getSodaName() + "\n");
             context.setSoda(soda);
             context.setState(SodaSold.instance());
+        }
+        else if (choice == 100) {
+            System.out.print("\nReturning Your Quarter");
+            context.setState(Admin.instance());
         }
         else {
             System.out.print("\n Invalid choice");
